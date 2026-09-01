@@ -16,11 +16,8 @@ Due by Friday, Sep 4 at 11:59pm ET
 
 - Brief review from last time: map_reduce_framework.ipynb
 - Discuss MapReduce paper
-- Slides: Intro to Distributed Systems
 - Slides: Consistent hashing
 - Slides: CAP theorem
-
-Time permitting:
 - Review notebook: RunningSparkOnACluster.ipynb
 
 ---
