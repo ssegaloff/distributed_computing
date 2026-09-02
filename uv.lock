@@ -145,6 +145,7 @@ dependencies = [
     { name = "pandas" },
     { name = "pip" },
     { name = "pyspark" },
+    { name = "uhashring" },
 ]
 
 [package.metadata]
@@ -153,6 +154,7 @@ requires-dist = [
     { name = "pandas", specifier = ">=3.0.5" },
     { name = "pip", specifier = ">=26.2.1" },
     { name = "pyspark", specifier = ">=4.2.0" },
+    { name = "uhashring", specifier = ">=2.5" },
 ]
 
 [[package]]
@@ -650,6 +652,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/92/ff/5a28bdfd8c3ebec42564ac7d0e54ca3db65044a9314a97f9564fa7a1e926/tzdata-2026.3.tar.gz", hash = "sha256:4a1518b8993086a7982523e071643f3c0e5f213e75b21318e78bcabfff9d1415", size = 198674, upload-time = "2026-07-10T08:50:37.887Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e5/6d/b53b99a9f2766d095985947a5782f1702cabb129a34f7a802d7197af832f/tzdata-2026.3-py2.py3-none-any.whl", hash = "sha256:dc096730c87af6cab1b171c9d532be840741ff5d459015e7f6947bd7d7e54931", size = 348168, upload-time = "2026-07-10T08:50:36.46Z" },
+]
+
+[[package]]
+name = "uhashring"
+version = "2.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/9e/fe/3b583cdd879ee25a3cffb2081b837fed9a428e0bb86ec37e7a1aa3ed5a52/uhashring-2.5.tar.gz", hash = "sha256:4855ede3ea66e645eaee016bbeb004e20570ada7714ecb1947cd45ce85d0c08e", size = 9860, upload-time = "2026-08-03T19:36:38.836Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d8/ac/14b8a5a5ec1fc7fcb7a6230ab8fdd26bcfc6b88d030106cbd0ccae989b2c/uhashring-2.5-py3-none-any.whl", hash = "sha256:09797d077ebfbaaed34f5414adfbde5239c620a540fa01af63d9b6aecd48f20a", size = 11644, upload-time = "2026-08-03T19:36:37.555Z" },
 ]
 
 [[package]]
