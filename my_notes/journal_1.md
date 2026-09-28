@@ -1,0 +1,15 @@
+## DS7200 Journal
+
+Entry 1: 
+
+I came into this module somewhat familiar with MapReduce, but the CAP theorem (and its tradeoffs) and Spark were both new to me. Though I had *heard* of Spark. The most important ideas were how MapReduce breaks a job into map, shuffle, and reduce steps, and the CAP tradeoff (consistent vs available). The most challenging part for me was consistent hashing and the uhashring lab. I got a bit lost in the lecture on the hash ring, and the point of it wasn't clear to me at first, even after we went over it in class. What helped me eventually get it more was thinking about the problem it solves. With mod N hashing, adding a server moves almost every key. With a hash ring, only a small fraction of keys move, and virtual nodes keep any one server from becoming a hot spot. Later, salting in module 3 reminded me of this, since both spread a hot spot out by splitting one thing into many pieces (I think). One of my classmates was kind enough to draw me a diagram and walk me through it. I enjoyed the logfile lab, which was a quick way to see how certain things have to be done differently in Spark than in plain Python.
+
+I have a hard time in this class given that it is via Zoom at the slump period of the day. I find that when we follow along with the code I am most engaged. I greatly appreciate a "big picture" setup when possible. So I really appreciate the learning objective markdown files.
+
+
+Entry 2:
+Module 2 went deeper into RDDs and explained what happens when Spark runs on a cluster. The most important concept seemed to be lazy evaluation. This is what makes Spark different from the other things I'm used to. Spark doesn't compute anything until an action is called. The challenging parts were a few logistical details. They weren't so much hard as things I needed to make an effort to remember. Like that filtering has to happen before a flatMap split, and saveAsTextFile creates a directory instead of a file, so re-running the cell causes a failure. I am a tad confused as to why RDDs would get used over data frames. But I'm working on that.
+
+
+Entry 3:
+This module went over DataFrames and Spark SQL and the aspects that matter at scale. I liked the commercial data lab. The nested JSON forced me to learn how to use printSchema() and the levels parameter. (Though now that I think about it, JSON Hero could've been a good resource too.) I found that the obvious fields were often mostly null or inconsistently encoded. For example, street_address was mostly empty, and closing times were stored as both HHMM and HHMMSS. The big takeaway I had was that most of the issue was understanding the data, not Spark syntax. The Spark syntax isn't too complex, and it's simple to look up. I enjoyed the RLE and Parquet demo. It was cool to find that good compression and the ability to skip row groups on a filter were separate properties. I will admit that I don't really understand Catalyst yet but I'm working on shoring up that knowledge over the coming weekend.
