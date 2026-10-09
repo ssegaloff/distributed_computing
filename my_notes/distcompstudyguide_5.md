@@ -90,12 +90,23 @@ k-means is the most popular clustering algorithm and is widely used in industry.
 
 The slides give the setup: given N observations, assign each to one of k groups. Each group has a **centroid**, its balance point (the mean of its members).
 
+**(My addition)** The centroids you *start* with are arbitrary guesses, not means of anything yet. "Centroid = mean of its members" only becomes true after the first assign step. A centroid also doesn't have to be one of the data points: the mean of {2, 3, 10, 11, 12} is 7.6, which isn't in the data.
+
 **(My addition)** The notebook and slides never spell out the loop itself. It's two steps, repeated until nothing changes:
 
 1. **Assign:** put each point in the cluster whose centroid is nearest.
 2. **Update:** move each centroid to the mean of the points now assigned to it.
 
 Each step can only lower the total squared distance from points to their centroids (the WSS, below), so the loop always stops. But it stops at the first arrangement it can't improve, which may be a **local** minimum rather than the best possible one. That's why the starting centroids matter so much, and why the slides spend most of their time on initialization.
+
+**(My addition) Worked example: getting stuck.** Take six points on a line: 0, 1, 10, 11, 20, 21, with k = 3 and bad starting centroids 0, 1, 10.
+
+- Round 1, assign: 0 goes to centroid 0, 1 goes to centroid 1, and 10, 11, 20, 21 all go to centroid 10 (it's nearest for each). Update: the centroids become 0, 1, and 15.5.
+- Round 2, assign: 10 is 5.5 from 15.5 but 9 from 1; 20 is 4.5 from 15.5 but 19 from 1. Nobody switches. Update: nothing moves. Converged.
+
+The result {0}, {1}, {10, 11, 20, 21} has WSS = 30.25 + 20.25 + 20.25 + 30.25 = **101**. The obvious grouping {0, 1}, {10, 11}, {20, 21} has WSS = 6 × 0.25 = **1.5**.
+
+**Why the loop can't escape.** The stuck state is a fixed point. Every point's nearest centroid is already its own, so the assign step moves no one. Every centroid is already the mean of its group, so the update step moves nothing. In particular, the centroid of {0} is just 0, and it can only move if its group gains or loses a member, which the assign step will never do. The loop converged to a local minimum, and getting out would need a centroid to jump across the data. That's why initialization matters (see k-means++ and k-means|| below).
 
 **The notebook's k-means spec sheet:**
 
@@ -146,6 +157,8 @@ $$
 
 
 **(My addition)** That's not WSS. The three sums of squares are linked by **TSS = WSS + BSS**: total variation around the overall mean splits into variation *within* clusters plus variation *between* cluster centers. Dividing through by TSS gives 1 − BSS/TSS = **WSS/TSS**, the *fraction* of the total variation left inside the clusters. The formula is right if you read its left side as "WSS as a share of TSS"; WSS itself is just the raw sum.
+
+**(My addition)** Raw WSS and WSS/TSS rank clusterings the same way on a fixed dataset. TSS is measured around the overall mean, so it depends only on the data, not on how you cluster it. Dividing every clustering's WSS by the same number can't change which one is smaller. The ratio is useful because it's scale-free. On the six points above, TSS = 401.5, so the stuck grouping has WSS/TSS ≈ 0.25 and the clean grouping ≈ 0.004.
 
 **(My addition) Worked on the notebook's data.** `kmeans_data.txt` has six points: (0,0,0), (0.1,0.1,0.1), (0.2,0.2,0.2), and (9,9,9), (9.1,9.1,9.1), (9.2,9.2,9.2). With k = 2 the centroids are (0.1,0.1,0.1) and (9.1,9.1,9.1).
 
