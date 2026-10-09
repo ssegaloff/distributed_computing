@@ -139,9 +139,11 @@ The notebook's cohesion diagram shows the two things a good clustering has: **in
 
 **Heads up:** the notebook's formula reads
 
-```latex
+
+$$
 \text{WSS} = 1 - \frac{\text{Between Sum of Squares}}{\text{Total Sum of Squares}}
-```
+$$
+
 
 **(My addition)** That's not WSS. The three sums of squares are linked by **TSS = WSS + BSS**: total variation around the overall mean splits into variation *within* clusters plus variation *between* cluster centers. Dividing through by TSS gives 1 − BSS/TSS = **WSS/TSS**, the *fraction* of the total variation left inside the clusters. The formula is right if you read its left side as "WSS as a share of TSS"; WSS itself is just the raw sum.
 
@@ -182,9 +184,9 @@ This is the heart of the *k-Means Extensions* slides and the reading.
 
 The **cost** of a set of centers C is the sum of squared distances from each point to its nearest center:
 
-```latex
+$$
 \phi_Y(C) = \sum_{y \in Y} \min_{i=1,\dots,k} \lVert y - c_i \rVert^2
-```
+$$
 
 This is just WSS again, now under the name "cost" or SSE. The goal of k-means is to choose centroids that minimize it.
 
@@ -351,9 +353,9 @@ Rank 2:  [  1   0   1 ]
 
 If multiplying a matrix A by a vector v just **scales** v by a constant λ,
 
-```latex
+$$
 A v = \lambda v
-```
+$$
 
 then λ is an **eigenvalue** and v is its **eigenvector**. The matrix doesn't rotate v; it only stretches or shrinks it (or flips it, if λ is negative).
 
@@ -369,9 +371,9 @@ For a data matrix with features along the columns, the **dimension is the number
 - **The p ≫ n problem**, one form of the curse of dimensionality: more features (p) than observations (n). There aren't enough degrees of freedom to estimate a model.
 - **Storage.** For example, regression's closed-form solution
 
-  ```latex
+  $$
   \hat\beta = (X^T X)^{-1} X^T Y
-  ```
+  $$
 
   needs the inverse of the **Gram matrix** XᵀX, which can be prohibitively large to store. It can be replaced with a lower-rank decomposition from SVD. **(My addition)** This is the normal-equation solver from Module 4's caching experiment. XᵀX is p × p, so it grows with the square of the number of features.
 - **Denoising.** Even randomly generated data produces a correlation matrix with some extreme values, by chance. Compressing the information into fewer features reduces that noise. It's especially useful when the covariance matrix itself matters, as in mean-variance portfolio optimization in quantitative finance.
@@ -387,11 +389,11 @@ PCA is the primary dimension reduction technique. **It constructs new vectors th
 
 **Relationship to eigenvectors.** The PCs are the **eigenvectors of the data's covariance matrix.** They're usually computed by eigendecomposition of that matrix:
 
-```latex
+$$
 \Sigma_{ij} = \frac{1}{n-1} \sum_{k=1}^{n} (x_{ki} - \bar{x}_i)(x_{kj} - \bar{x}_j)
 \qquad\qquad
 \Sigma = V \Lambda V^T
-```
+$$
 
 The columns of V are the PCs, and the diagonal of Λ holds their eigenvalues. **(My addition)** Each eigenvalue *is* the variance of the data along its PC. So "the first PC has the most variance" means "the first PC has the largest eigenvalue," and the scree plot for PCA is just the eigenvalues in order.
 
@@ -471,9 +473,9 @@ result = model.transform(df)
 
 SVD is a **more general** factorization than eigendecomposition: it works for **any rectangular matrix**. It's one of the major accomplishments of linear algebra. It factors an m × n matrix into three matrices with special structure:
 
-```latex
+$$
 A = U \Sigma V^T
-```
+$$
 
 - **U** is an orthonormal m × m matrix. Its columns are the **left singular vectors**.
 - **Σ** is a rectangular m × n **diagonal** matrix with nonnegative entries in descending order. Those diagonal entries are the **singular values** of A.
@@ -483,9 +485,9 @@ The singular values are the **square roots of the eigenvalues of AAᵀ**. **(My 
 
 **The point: keep only the top k.** In red in the notebook: the purpose of SVD is to select only the top k singular values and their singular vectors. That gives an approximation of A:
 
-```latex
+$$
 \hat A = \hat U \hat\Sigma \hat V^T
-```
+$$
 
 | Matrix | Dimensions |
 | --- | --- |
