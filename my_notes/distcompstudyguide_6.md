@@ -84,10 +84,10 @@ In practice, implicit feedback often works better. **The lab is implicit**: play
 
 The idea: use the pattern of user–item preferences to recommend items the user is likely to prefer. The interaction matrix is generally **sparse** (most users touch few items). You compute a similarity metric and, for item *i*, return the top *k* most similar items. A popular metric is **cosine similarity**:
 
-```latex
+$$
 \cos\theta = \frac{\mathbf A \cdot \mathbf B}{\lVert \mathbf A \rVert \, \lVert \mathbf B \rVert}
 = \frac{\sum_i A_i B_i}{\sqrt{\sum_i A_i^2}\,\sqrt{\sum_i B_i^2}}
-```
+$$
 
 Smaller angle → higher cosine → more similar.
 
@@ -111,21 +111,21 @@ ALS is popular because it **scales well**. It uses **latent factors**: a small n
 
 **The setup** (the notebook's images). The user–item matrix R is m × n (m users, n items). ALS approximates it with two thin matrices:
 
-```latex
+$$
 R \approx U V^T, \qquad U \in \mathbb R^{m\times k}, \quad V \in \mathbb R^{n\times k}
-```
+$$
 
 Each user is a length-k vector (a row of U), each item is a length-k vector (a row of V), and the predicted value for user i and item j is their dot product:
 
-```latex
+$$
 \hat R_{ij} = U_i \cdot V_j^T
-```
+$$
 
 **The objective** (the notebook's image): squared error on the **observed** cells only, plus a regularization penalty.
 
-```latex
+$$
 \min_{U,V} \sum_{(i,j)\,\in\,\text{observed}} \left(R_{ij} - U_i V_j^T\right)^2 + \lambda\left(\lVert U\rVert^2 + \lVert V\rVert^2\right)
-```
+$$
 
 **The strategy:**
 
@@ -147,9 +147,9 @@ user 3 [  4    ?    2 ]
 
 With k = 1, each user and artist is a single number. Start with every artist factor at 1 (Spark starts randomly; 1s keep the arithmetic readable) and use λ = 0.1. With rank 1, fixing V makes user i's ridge solution
 
-```latex
+$$
 u_i = \frac{\sum_j r_{ij}\, v_j}{\sum_j v_j^2 + \lambda\, n_i}
-```
+$$
 
 where the sums run over user i's observed artists and n_i is how many there are. (The λ·n_i is Spark's scaling, explained below.)
 
@@ -207,11 +207,11 @@ Common strategies:
 
 Recall in general is true positives / all positives. For a recommender that returns K items:
 
-```latex
+$$
 \text{Recall@}K = \frac{\#\text{ relevant items in the top }K}{\text{total }\#\text{ relevant items}}
 \qquad
 \text{Precision@}K = \frac{\#\text{ relevant items in the top }K}{K}
-```
+$$
 
 The notebook's two examples, both with K = 10 and 9 of the 10 recommendations relevant:
 
