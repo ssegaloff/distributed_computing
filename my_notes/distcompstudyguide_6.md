@@ -26,7 +26,7 @@ Module 5 was unsupervised learning on a feature matrix. Module 6 starts with a d
 - Construct machine learning pipelines.
 - Progress toward an end-to-end predictive modeling project on a large dataset.
 
-**What's due (agendas 12–13).** **Tonight, Friday Oct 16, 11:59pm ET:** Lab 5 (Recommender Systems Using Music Tracks from Audioscrobbler), Quiz 6 (ML pipelines, Transformations, and Recommender Systems), and Journaling for Modules 1–6. Next: read *Large Scale Distributed Deep Networks* for the **Oct 19** discussion, and Quiz 7 (Distributed Model Training) is due **Oct 23**.
+**What's due (agendas 12–13).** **Tonight, Friday Oct 16, 11:59pm ET:** Lab 5 (Recommender Systems Using Music Tracks from Autoscrobbler), Quiz 6 (ML pipelines, Transformations, and Recommender Systems), and Journaling for Modules 1–6. Next: read *Large Scale Distributed Deep Networks* for the **Oct 19** discussion, and Quiz 7 (Distributed Model Training) is due **Oct 23**.
 
 **In class (agenda 13):** the recommender notebook, the lab kickoff, the pipelines notebook, and the feature utilities notebook with emphasis on **`MaxAbsScaler`** and **`OneHotEncoder`**. Those two are likely quiz material.
 
@@ -36,7 +36,7 @@ Module 5 was unsupervised learning on a feature matrix. Module 6 starts with a d
 
 **Heads up: the link in `reading.md` now opens a different article.** When I fetched the `towardsdatascience.com` URL on 10/16, it served *Recommender Systems – A Complete Guide to Machine Learning Models* (Casalegno, 2022), which has no Spark code. The article the reading describes is still on Medium at [medium.com/data-science/prototyping-a-recommender-system-step-by-step-part-2-…](https://medium.com/data-science/prototyping-a-recommender-system-step-by-step-part-2-alternating-least-square-als-matrix-4a76c58714a1). Its Spark code is embedded from GitHub, which my fetch tool couldn't render, so I can only confirm what the text says: it uses **explicit** movie ratings, wraps tuning in a function, and reports best settings of rank = 20, maxIter = 10, regParam = 0.05. Keep in mind that your lab is **implicit** feedback (below), so its tuning metric and some of its choices won't carry over.
 
-**Textbook pointers.** The feature utilities and pipelines notebooks cite ***Learning Spark*, Ch. 11: Machine Learning with MLlib**. Same issue as Module 5: that's the **1st** edition's chapter. In the required 2nd edition, MLlib (including pipelines and feature transformers) is **Ch. 10**. The recommender notebook cites ***Advanced Analytics with Spark*, Ch. 3**, which isn't one of the course textbooks. **(My addition, general knowledge, not checked against the book)** That chapter builds an ALS recommender on this same Audioscrobbler dataset, which is likely where the lab came from.
+**Textbook pointers.** The feature utilities and pipelines notebooks cite ***Learning Spark*, Ch. 11: Machine Learning with MLlib**. Same issue as Module 5: that's the **1st** edition's chapter. In the required 2nd edition, the MLlib chapter is **Ch. 10**, *Machine Learning with MLlib* (I checked the table of contents for Module 5, not the chapter itself). The recommender notebook cites ***Advanced Analytics with Spark*, Ch. 3**, which isn't one of the course textbooks. **(My addition, general knowledge, not checked against the book)** That chapter builds an ALS recommender on this same Audioscrobbler dataset, which is likely where the lab came from.
 
 **Link check (10/16):**
 
@@ -103,7 +103,7 @@ The first row is the point of cosine: it ignores **magnitude** (how much someone
 
 **(My addition) User-based vs. item-based.** The notebook's prose describes comparing *items*, while its concept list says "finding similar *users*." Both are standard: compare rows (users) or columns (items) of the same matrix.
 
-**Why it doesn't scale** (the notebook's note, with my addition on the reason): comparing every user with every other user is O(m²) pairs, each a length-n dot product. With millions of users, that's the expensive part ALS avoids.
+**Why it doesn't scale** (your own class note in the notebook, from your 10/14 commit; the reason is my addition): comparing every user with every other user is O(m²) pairs, each a length-n dot product. With millions of users, that's the expensive part ALS avoids.
 
 ### Alternating least squares (ALS)
 
@@ -157,7 +157,7 @@ where the sums run over user i's observed artists and n_i is how many there are.
 - **User 2** (a2, a3): (2 + 1) / 2.2 = **1.36**
 - **User 3** (a1, a3): (4 + 2) / 2.2 = **2.73**
 
-Then fix those and solve each artist the same way: a1 = 1.29, a2 = 1.02, a3 = 0.72. That's one iteration. Running it on in NumPy, the total objective falls every iteration (6.56, 5.51, 5.06, … 3.73) and settles by about iteration 50. The filled-in cells come out as:
+Then fix those and solve each artist the same way: a1 = 1.29, a2 = 1.02, a3 = 0.72. That's one iteration. Continuing in NumPy, the total objective falls every iteration (6.56, 5.51, 5.06, … 3.73) and settles by about iteration 50. The filled-in cells come out as:
 
 | Missing cell | Prediction |
 | --- | --- |
@@ -167,7 +167,7 @@ Then fix those and solve each artist the same way: a1 = 1.29, a2 = 1.02, a3 = 0.
 
 Worth trying one half-step by hand yourself before the quiz.
 
-**Heads up: Spark scales λ, and the objective image doesn't show it.** Confirmed in source (`ALS.scala`: the solve uses `numExplicits * regParam`) and in the Spark docs: each user's penalty is multiplied by the number of ratings that user has, and each item's by the number it received. The docs call this **ALS-WR** ("weighted-λ-regularization") and say it makes `regParam` less dependent on dataset size. So the notebook's λ(‖U‖² + ‖V‖²) is the textbook form; Spark's effective penalty is λ(Σᵢ nᵢ‖Uᵢ‖² + Σⱼ nⱼ‖Vⱼ‖²).
+**Heads up: Spark scales λ, and the objective image doesn't show it.** Confirmed in source (`ALS.scala`: the solve uses `numExplicits * regParam`) and in the Spark docs: each user's penalty is multiplied by the number of ratings that user has, and each item's by the number it received. The docs name this **ALS-WR**, cite the paper *Large-Scale Parallel Collaborative Filtering for the Netflix Prize*, and say it makes `regParam` less dependent on dataset size. (The docs don't expand the acronym; **general knowledge:** it stands for ALS with weighted-λ-regularization.) So the notebook's λ(‖U‖² + ‖V‖²) is the textbook form; Spark's effective penalty is λ(Σᵢ nᵢ‖Uᵢ‖² + Σⱼ nⱼ‖Vⱼ‖²).
 
 **(My addition) Why regularization is needed at all.** The factorization isn't unique: multiply every user factor by 2 and divide every item factor by 2, and every prediction is unchanged. Without a penalty, the factors can drift to extreme sizes. With a penalty, the balanced solution wins.
 
@@ -178,7 +178,7 @@ Worth trying one half-step by hand yourself before the quiz.
 - **Preference** p = 1 if r > 0, else 0. This is the target being predicted.
 - **Confidence** c = 1 + α·r. Unplayed cells get preference 0 with confidence 1; played cells get preference 1 with more confidence the more they were played.
 
-The objective weights each cell's squared error by its confidence, and it runs over **all** cells, not just the observed ones. Spark makes that affordable with a trick from the paper: it precomputes VᵀV once per iteration (`computeYtY` in the source) and corrects only for the observed cells.
+The objective weights each cell's squared error by its confidence, and it runs over **all** cells, not just the observed ones. Spark makes that affordable with a trick from the paper: before each half-step it precomputes VᵀV (or UᵀU) once (`computeYtY` in the source) and then corrects only for the observed cells.
 
 **The α the lab gives you matters.** Here's c = 1 + α·r for a few play counts:
 
@@ -271,7 +271,7 @@ Both the RDD API (`pyspark.mllib.recommendation`) and the DataFrame API (`pyspar
 
 **How it's distributed** (the notebook): each row of U can be solved independently across workers, and so can each row of V. Spark uses **block partitioning** to reduce network traffic and scales to millions of users and items.
 
-**(My addition) What block partitioning means.** Users are split into `numUserBlocks` groups and items into `numItemBlocks` groups (10 each by default, confirmed in source). To update a block of users, an executor needs the item factors for only the items those users touched. Spark works out once which item factors each user block needs and ships only those each iteration, rather than broadcasting all of V. It's the same principle as Modules 4–5: move small factor vectors, never the full matrix.
+**(My addition) What block partitioning means.** Users are split into `numUserBlocks` groups and items into `numItemBlocks` groups (10 each by default). To update a block of users, an executor needs the item factors for only the items those users touched. Spark works out once which factors each block needs (the source calls these `InBlock`s and `OutBlock`s) and ships only those each iteration, rather than broadcasting all of V. Confirmed in source. It's the same principle as Modules 4–5: move small factor vectors, never the full matrix.
 
 ### Amazon Personalize and the architecture diagram
 
@@ -355,7 +355,7 @@ b  2.0  (2,[],[])         -> [0, 0]
 | 2 | 0.1, 1, 10 | 10 | 0.01, 0.1, 1.0 |
 | 3 | −8, −4, 6 | 8 | −1.0, −0.5, 0.75 |
 
-The printed `0.010000000000000002` is floating-point rounding of 0.1 / 10.
+The printed `0.010000000000000002` is floating-point rounding. Spark stores 1/max and multiplies (confirmed in source), and 0.1 × 0.1 gives that value in floating point, while 0.1 / 10 would print as 0.01.
 
 **(My addition) Tradeoff:** MaxAbsScaler is driven by one extreme value per column, so a single outlier squashes everything else toward 0. StandardScaler uses the standard deviation, which is less sensitive to a single point, but centering costs sparsity. Like `fit`/`transform` throughout MLlib, both learn their statistics in `fit()`; Module 5's combiner pattern applies (per-partition max or sum, then combine).
 
@@ -390,7 +390,7 @@ Fills missing values (NaN by default) with the column **mean** (default) or medi
 
 Uses the chi-squared test of independence between each feature and the label to select features. It needs labeled data with **categorical** features. `numTopFeatures` keeps the top n by the test. The other modes are percentile, fpr, fdr, and fwe.
 
-The example keeps 2 of 4 features. No saved output; by hand (I computed the chi-squared statistics in NumPy), features 1 and 2 have p ≈ 0.39 and features 3 and 4 have p ≈ 0.22, so it keeps **features 3 and 4**: `[18.0, 1.0]`, `[12.0, 0.0]`, `[15.0, 0.1]`. That matches the output in Spark's own docs for this example.
+The example keeps 2 of 4 features. No saved output; by hand (I computed the chi-squared statistics in NumPy), features 1 and 2 have p ≈ 0.39 and features 3 and 4 have p ≈ 0.22, so it keeps **features 3 and 4**: `[18.0, 1.0]`, `[12.0, 0.0]`, `[15.0, 0.1]`. Spark ranks by p-value, breaking ties by feature index (confirmed in source).
 
 **Heads up, two things:**
 
@@ -544,11 +544,17 @@ The README says the dump is from 6 May 2005, covers about 150,000 users, and tha
 ### Traps to watch for (my addition)
 
 1. **`implicitPrefs=True`.** It defaults to False, and the notebook's list doesn't mention it. Without it, you're fitting an explicit model to play counts.
-2. **`sample(fraction=0.2, seed=314)` is approximate.** It keeps each row with probability 0.2, so you'll get *about* 20%. That's expected; don't try to force an exact count.
+2. **`sample(fraction=0.2, seed=314)` is approximate.** Its docstring says it's not guaranteed to return exactly that fraction (confirmed in source); you'll get *about* 20%. That's expected; don't try to force an exact count.
 3. **Count *distinct* artists in step 2.** "Listened to fewer than 10 artists" means distinct artists per user in your 20% sample, not rows or total plays. Keep users with 10 or more.
-4. **Make the split reproducible.** Spark's own ALS source has an error message about this: if the input to `sample` or `randomSplit` isn't deterministic, the splits can change between actions, and it suggests sorting before splitting or checkpointing. A practical pattern is to cache the preprocessed DataFrame before `randomSplit([0.6, 0.2, 0.2], seed=314)`. The tradeoff: caching costs memory (and needs `unpersist()` later, per your learnings file), but without it, Spark may recompute the sample and filter for each split and each action.
+4. **Make the split reproducible.** Spark's own ALS source has an error message about this: if the input to `sample` or `randomSplit` isn't deterministic, the splits can change between actions, and it suggests sorting before splitting or checkpointing. Options before `randomSplit([0.6, 0.2, 0.2], seed=314)`:
+
+   | Option | Pros | Cons |
+   | --- | --- | --- |
+   | Sort, then split (Spark's suggestion) | Deterministic input order | A full sort of the data |
+   | Checkpoint (Spark's suggestion) | Cuts the lineage, so nothing is recomputed | Needs a checkpoint directory; writes the data to disk |
+   | Cache | Cheap and usually enough in practice | **Not a guarantee**: if a cached partition is evicted, Spark recomputes it. Needs `unpersist()` later (your learnings file) |
 5. **"First row" has no guaranteed order.** `show(1)` returns whatever row the first partition yields. That's fine as long as you identify Test User 1 **once**, store the user id in a variable, and reuse it; don't call `first()` again later.
-6. **Test User 1 might be a cold-start user.** With a row-level 60/20/20 split, a user who appears in the test set almost always has training rows too, but not guaranteed. Check before Task 3. Set `coldStartStrategy="drop"` either way, so unseen users don't produce NaN.
+6. **Test User 1 might be a cold-start user.** With a row-level 60/20/20 split and at least 10 artists per user, my **guess** is that almost every test user also has training rows, but it isn't guaranteed. Check before Task 3. Set `coldStartStrategy="drop"` either way, so unseen users don't produce NaN.
 7. **Already-heard artists.** `recommendForUserSubset` doesn't exclude artists the user played in training (confirmed in source). So the top 10 may be artists the user already knows. That's a design decision for you, and it changes Recall@K:
 
    | Option | What it measures | Cost |
@@ -564,7 +570,7 @@ The README says the dump is from 6 May 2005, covers about 150,000 users, and tha
 12. **`alpha = 0.01` is a very low confidence weight** (see the table in Part 1: 100 plays → confidence 2). It's fixed by the lab, but it's relevant context for Task 8.
 13. **Local-mode memory.** In local mode, the driver *is* the executor, so it's `spark.driver.memory` that limits you, and it must be set when the session is created. **(General knowledge)** The default is small (1 GB) relative to your 47 GB.
 
-**Heads up about the template:** the lab's header and README say **Audioscrobbler**; the notebook's filename and agenda title say "Autoscrobbler." Same dataset.
+**Heads up about naming:** the README says **Audioscrobbler** (the real site); the lab's instructions, its filename, and the agenda say "Autoscrobbler." Same dataset.
 
 ---
 
@@ -603,7 +609,7 @@ The README says the dump is from 6 May 2005, covers about 150,000 users, and tha
 **Lab 5 checklist**
 
 - Decide where to run (copy the file locally vs. Rivanna); check the delimiter.
-- Sample 0.2 with seed 314 → keep users with ≥ 10 **distinct** artists → cache → `randomSplit([0.6, 0.2, 0.2], seed=314)`.
+- Sample 0.2 with seed 314 → keep users with ≥ 10 **distinct** artists → make the input deterministic (sort, checkpoint, or cache; see trap 4) → `randomSplit([0.6, 0.2, 0.2], seed=314)`.
 - Record Test User 1's id once.
 - Model 1: `implicitPrefs=True`, rank 8, maxIter 5, regParam 0.02, alpha 0.01, `coldStartStrategy="drop"`.
 - Decide and state: K, what counts as relevant, and whether to exclude already-heard artists.
