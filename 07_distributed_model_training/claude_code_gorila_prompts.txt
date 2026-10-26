@@ -1,0 +1,37 @@
+Claude Prompts for Gorila
+Last updated: Oct 22, 2026
+--------------------------------------
+
+cd to folder with repo: distributed_computing
+
+1. Prompt: tell me about the goril content in this project
+
+2. Prompt: can you write a simple Gorila algorithm in python that I can demo to my PhD students?
+
+3. Prompt: explain the gridworld problem it's solving
+
+4. Prompt: how are theta and theta- different?
+
+5. Prompt: explain what a bundle is
+
+6. Prompt: are the replay buffers shared across learners? actors?
+
+7. Prompt: would it make more sense to use shared replay?
+
+ Suggestion: add a --shared-buffer flag and run both modes
+  in class. Then students can see the tradeoff directly:
+  - Local: less communication, but each learner sees
+    narrower data.
+  - Shared: better data mixing, but a central bottleneck.
+    This is the direction Ape-X takes, adding prioritized
+    sampling and a single central learner.
+
+  Want me to add the flag and run both modes so you have
+  real numbers to show?
+
+8. Prompt: yes, run both modes and explain the difference
+
+9. Prompt: how is staleness measured?
+
+10. Prompt: create a README.md for the new code you created
+Review the markdown file
