@@ -1,0 +1,3 @@
+v1
+{"path":"file:///home/sabine/projects/distributed_computing/10_streaming_systems/tws_workspace/signals/part-00000-bdeaa0f6-0d07-4764-8ede-2638012f5641-c000.snappy.parquet","size":2688,"isDir":false,"modificationTime":1794864464217,"blockReplication":1,"blockSize":33554432,"action":"add"}
+{"path":"file:///home/sabine/projects/distributed_computing/10_streaming_systems/tws_workspace/signals/part-00001-4eb60a04-ad55-48e1-9af6-821d45927f0b-c000.snappy.parquet","size":2699,"isDir":false,"modificationTime":1794864464217,"blockReplication":1,"blockSize":33554432,"action":"add"}
